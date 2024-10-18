@@ -13,11 +13,12 @@ def all_recipes(args):
     
     return {'recipes':recipes_list}
 
-@route_post(BASE_URL + 'new', args={'cuisines':str, 'name':str, 'ingredients':str, 'instructions':str})
+@route_post(BASE_URL + 'new', args={'cuisine':str, 'name':str, 'time taken':str, 'ingredients':str, 'instructions':str})
 def new_recipe(args):
     new_recipe = Recipe(
-        cuisines = args['cuisines'],
+        cuisine = args['cuisine'],
         name = args['name'],
+        time_taken = args['time taken'],
         ingredients = args['ingredients'],
         instructions = args['instructions'],
         likes = 0,
@@ -58,22 +59,53 @@ def views(args):
     else:
         return {'error': 'recipe doesnt exist'}
 
-@route_post(BASE_URL + 'change_recipe', args={'id':int, 'new_recipe':str})
+@route_post(BASE_URL + 'change_recipe', args={'id':int, 'new_ingredients':str, 'new_instructions':str,})
 def change_recipe(args):
     if Recipe.objects.filter(id=args['id']).exists():
-        change_recipe = Recipe.objects.get(id=args['id'])
-        change_recipe.change_recipe(args['new_recipe'])
-        return {'recipes': change_recipe.json_response()}
+        recipe_change = Recipe.objects.get(id=args['id'])
+        recipe_change.change_recipe(args['new_ingredients'], args['new_instructions'])
+        return {'recipes': recipe_change.json_response()}
     else:
         return {'error': 'recipe doesnt exist'}
 
-@route_get(BASE_URL + 'all/cuisines', args={'search_cuisines':str})
-def different_cuisines(args):
-    if Recipe.objects.filter(cuisines=(args['search_cuisines'])).exists:
-        cuisines = Recipe.objects.filter(cuisines=(args['search_cuisines']))
-        return {'recipe': cuisines.json_response()}
-    
-    else:
-        return {'error': 'recipe doesnt exist'}
+@route_get(BASE_URL + 'search_recipe', args={'keyword name':str})
+def search_recipe(args):
+    keyword_name = []
 
+    for recipe in Recipe.objects.filter(name__contains=(args['keyword name'])):
+        keyword_name.append(recipe.json_response())
+    return {'recipes': keyword_name}
+
+@route_get(BASE_URL + 'search/cuisines', args={'search cuisines':str})
+def search_cuisines(args):
+    different_cuisines = []
+
+    for recipe in Recipe.objects.filter(cuisine__contains=(args['search cuisines'])):
+        different_cuisines.append(recipe.json_response())
+    return {'recipes': different_cuisines}
+
+@route_get(BASE_URL + 'search/ingredients', args={'search ingredients':str})
+def search_ingredients(args):
+    keyword_ingredients = []
+
+    for recipe in Recipe.objects.filter(ingredients__contains=(args['search ingredients'])):
+        keyword_ingredients.append(recipe.json_response())
+    return {'recipes': keyword_ingredients}
+
+@route_get(BASE_URL + 'quick_recipes')
+def least_to_most(args):
+    time_ranking = []
+
+    for recipe in Recipe.objects.order_by('time_taken'):
+        time_ranking.append(recipe.json_response())
+    return {'recipes': time_ranking}
+
+@route_get(BASE_URL + 'popularity', args={'id':int})
+def popularity(args):
+    if Recipe.objects.filter(id=args['id']).exists():
+        popularity = Recipe.objects.get(id=args['id'])
+        popularity.calculate_popularity()
+        return {'recipes': popularity.json_response()}
+    else:
+        return {'error': 'statement doesnt exist'}   
 

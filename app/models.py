@@ -3,8 +3,9 @@
 from banjo.models import Model, StringField, IntegerField, FloatField, BooleanField
 
 class Recipe(Model):
-    cuisines = StringField()
+    cuisine = StringField()
     name = StringField()
+    time_taken = StringField()
     ingredients = StringField()
     instructions = StringField()
     likes = IntegerField()
@@ -15,8 +16,9 @@ class Recipe(Model):
         
         return {
             'id': self.id,
-            'cuisines': self.cuisines,
+            'cuisine': self.cuisine,
             'name': self.name,
+            'time taken': self.time_taken,
             'ingredients': self.ingredients,
             'instructions': self.instructions,
             'likes': self.likes,
@@ -39,5 +41,5 @@ class Recipe(Model):
         self.save()
 
     def calculate_popularity(self):
-        self.popularity_percentage = (self.likes/self.views) * 100
+        self.popularity = (self.likes/self.views) * 100
         self.save()
