@@ -4,7 +4,7 @@ from banjo.urls import route_get, route_post
 from .models import Recipe
 from settings import BASE_URL
 
-@route_get(BASE_URL + 'all')
+@route_get(BASE_URL + 'all')    #shows all recipes
 def all_recipes(args):
     recipes_list = []
 
@@ -13,7 +13,7 @@ def all_recipes(args):
     
     return {'recipes':recipes_list}
 
-@route_post(BASE_URL + 'new', args={'cuisine':str, 'name':str, 'time taken':str, 'ingredients':str, 'instructions':str})
+@route_post(BASE_URL + 'new', args={'cuisine':str, 'name':str, 'time taken':str, 'ingredients':str, 'instructions':str})    #creates a new recipe
 def new_recipe(args):
     new_recipe = Recipe(
         cuisine = args['cuisine'],
@@ -30,7 +30,7 @@ def new_recipe(args):
 
     return {'recipes': new_recipe.json_response()}
 
-@route_get(BASE_URL + 'one', args={'id':int})
+@route_get(BASE_URL + 'one', args={'id':int})       #will only output the chosen recipe
 def one_recipe(args):
          
     if Recipe.objects.filter(id=args['id']).exists():
@@ -41,7 +41,7 @@ def one_recipe(args):
     else:
         return {'error': 'no recipes found'}
 
-@route_post(BASE_URL + 'likes', args={'id':int})
+@route_post(BASE_URL + 'likes', args={'id':int})        #increases likes on chosen recipe
 def likes(args):
     if Recipe.objects.filter(id=args['id']).exists():
         likes = Recipe.objects.get(id=args['id'])
@@ -50,7 +50,7 @@ def likes(args):
     else:
         return {'error': 'recipe doesnt exist'}
 
-@route_get(BASE_URL + 'views', args={'id':int})
+@route_get(BASE_URL + 'views', args={'id':int})     #increases views on chosen recipe
 def views(args):
     if Recipe.objects.filter(id=args['id']).exists():
         views = Recipe.objects.get(id=args['id'])
@@ -59,7 +59,7 @@ def views(args):
     else:
         return {'error': 'recipe doesnt exist'}
 
-@route_post(BASE_URL + 'change_recipe', args={'id':int, 'new_ingredients':str, 'new_instructions':str,})
+@route_post(BASE_URL + 'change_recipe', args={'id':int, 'new_ingredients':str, 'new_instructions':str})     #changes the ingredients and instructions of chosen recipe
 def change_recipe(args):
     if Recipe.objects.filter(id=args['id']).exists():
         recipe_change = Recipe.objects.get(id=args['id'])
@@ -68,7 +68,7 @@ def change_recipe(args):
     else:
         return {'error': 'recipe doesnt exist'}
 
-@route_get(BASE_URL + 'search_recipe', args={'keyword name':str})
+@route_get(BASE_URL + 'search_recipe', args={'keyword name':str})       #searches for a recipe by its name, will output a list of recipes with the keyword given
 def search_recipe(args):
     keyword_name = []
 
@@ -76,7 +76,7 @@ def search_recipe(args):
         keyword_name.append(recipe.json_response())
     return {'recipes': keyword_name}
 
-@route_get(BASE_URL + 'search/cuisines', args={'search cuisines':str})
+@route_get(BASE_URL + 'search/cuisines', args={'search cuisines':str})      #searches for a recipe by its cuisine, will output a list of recipes with the said cuisine
 def search_cuisines(args):
     different_cuisines = []
 
@@ -84,7 +84,7 @@ def search_cuisines(args):
         different_cuisines.append(recipe.json_response())
     return {'recipes': different_cuisines}
 
-@route_get(BASE_URL + 'search/ingredients', args={'search ingredients':str})
+@route_get(BASE_URL + 'search/ingredients', args={'search ingredients':str})        #searches for a recipe by its ingredients, will output a list of recipes with the ingredient searched
 def search_ingredients(args):
     keyword_ingredients = []
 
@@ -92,7 +92,7 @@ def search_ingredients(args):
         keyword_ingredients.append(recipe.json_response())
     return {'recipes': keyword_ingredients}
 
-@route_get(BASE_URL + 'quick_recipes')
+@route_get(BASE_URL + 'quick_recipes')      #sorts the recipes from least amount of time taken to most
 def least_to_most(args):
     time_ranking = []
 
@@ -100,7 +100,7 @@ def least_to_most(args):
         time_ranking.append(recipe.json_response())
     return {'recipes': time_ranking}
 
-@route_get(BASE_URL + 'popularity', args={'id':int})
+@route_get(BASE_URL + 'popularity', args={'id':int})        #shows the popularity of a recipe
 def popularity(args):
     if Recipe.objects.filter(id=args['id']).exists():
         popularity = Recipe.objects.get(id=args['id'])
