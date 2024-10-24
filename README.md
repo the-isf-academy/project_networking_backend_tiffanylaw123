@@ -13,6 +13,7 @@ My API is a cooking recipe where people can collaborate and share different reci
 
 |      method name     | included field names |       field data type       |            parameter            |
 |:--------------------:|:--------------------:|:---------------------------:|:-------------------------------:|
+|                      |                      |                             |                                 |
 |     json_response    |         'id',        |             n/a             |               self              |
 |                      |      'cuisine',      |    cuisine=StringField(),   |                                 |
 |                      |        'name',       |     name=StringField(),     |                                 |
@@ -39,6 +40,7 @@ My API is a cooking recipe where people can collaborate and share different reci
 
 |     route name     | HTTP method |          payload         |
 |:------------------:|:-----------:|:------------------------:|
+|                    |             |                          |
 |     all_recipes    |     get     |            n/a           |
 |                    |             |                          |
 |     new_recipe     |     post    |      'cuisine':str,      |
