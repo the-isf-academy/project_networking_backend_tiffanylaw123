@@ -5,12 +5,13 @@ from banjo.models import Model, StringField, IntegerField, FloatField, BooleanFi
 class Recipe(Model):
     cuisine = StringField()
     name = StringField()
-    time_taken = StringField()
+    time_taken = IntegerField()
     ingredients = StringField()
     instructions = StringField()
     likes = IntegerField()
     views = IntegerField()
     popularity = FloatField()
+    image = StringField()
 
     def json_response(self):
         
@@ -24,6 +25,7 @@ class Recipe(Model):
             'likes': self.likes,
             'views': self.views,
             'popularity': self.popularity
+            'image': self.image
         }
 
     def increase_likes(self):       #is a method that will be used in views.py to increase likes

@@ -13,7 +13,7 @@ def all_recipes(args):
     
     return {'recipes':recipes_list}
 
-@route_post(BASE_URL + 'new', args={'cuisine':str, 'name':str, 'time taken':str, 'ingredients':str, 'instructions':str})    #creates a new recipe
+@route_post(BASE_URL + 'new', args={'cuisine':str, 'name':str, 'time taken':int, 'ingredients':str, 'instructions':str, 'image url':str})    #creates a new recipe
 def new_recipe(args):
     new_recipe = Recipe(
         cuisine = args['cuisine'],
@@ -24,6 +24,7 @@ def new_recipe(args):
         likes = 0,
         views = 0,
         popularity = 0
+        image = args['image url']
     )
 
     new_recipe.save()
@@ -49,6 +50,14 @@ def likes(args):
         return {'recipes': likes.json_response()}
     else:
         return {'error': 'recipe doesnt exist'}
+
+@route_get(BASE_URL + 'liked_recipes')
+def liked_recipes(args):
+    liked_list = []
+    for recipe in Recipe.objects.all():
+        if recipe.likes == True:
+            liked_list.append(likes.json_response())
+    return {'recipe':liked_list}
 
 @route_get(BASE_URL + 'views', args={'id':int})     #increases views on chosen recipe
 def views(args):
